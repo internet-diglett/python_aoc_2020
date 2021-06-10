@@ -11,17 +11,30 @@ def find_two_sum(integers, target_sum):
     low_index = 0
     high_index = -1
     total = 0
-    count = 0
-    # sum lowest and highest, decrementing highest if sum is > 2020,
     while total != target_sum:
-        count += 1
         total = integers[low_index] + integers[high_index]
-        if total > 2020:
+        if total == target_sum:
+            return (integers[low_index], integers[high_index])
+        elif low_index == len(integers)-1 or high_index == 0-len(integers):
+            break
+        elif total > target_sum:
             high_index -= 1
-        elif total < 2020:
+        elif total < target_sum:
             high_index = -1
             low_index += 1
-        else:
-            print(f'Number of iterations {count}')
-            return (integers[high_index], integers[low_index])
 
+def part_two(data):
+    expenses = strings_to_integers(data)
+    first, second, third = find_three_sum(expenses, 2020)
+    return first * second * third
+
+def find_three_sum(integers, target_sum):
+    for i in integers:
+        new_integers = integers
+        new_integers.remove(i)
+        new_target_sum = target_sum - i
+        result = find_two_sum(new_integers, new_target_sum)
+        if result is None:
+            continue
+        else:
+            return {i, result[0], result[1]}
